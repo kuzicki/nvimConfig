@@ -1,4 +1,5 @@
 local M = {
+-- lukas-reineke/indent-blankline.nvim
   "lukas-reineke/indent-blankline.nvim",
   event = "VeryLazy",
   main = "ibl"
@@ -7,71 +8,47 @@ local M = {
 function M.config()
   local icons = require "kuzicki.icons"
 
-		local highlight = {
-    	"RainbowRed",
-    	"RainbowYellow",
-    	"RainbowBlue",
-    	"RainbowOrange",
-    	"RainbowGreen",
-    	"RainbowViolet",
-    	"RainbowCyan",
-		}
-		local hooks = require "ibl.hooks"
-		-- create the highlight groups in the highlight setup hook, so they are reset
-		-- every time the colorscheme changes
-		hooks.register(hooks.type.HIGHLIGHT_SETUP, function()
-    		vim.api.nvim_set_hl(0, "RainbowRed", { fg = "#E06C75" })
-    		vim.api.nvim_set_hl(0, "RainbowYellow", { fg = "#E5C07B" })
-    		vim.api.nvim_set_hl(0, "RainbowBlue", { fg = "#61AFEF" })
-    		vim.api.nvim_set_hl(0, "RainbowOrange", { fg = "#D19A66" })
-    		vim.api.nvim_set_hl(0, "RainbowGreen", { fg = "#98C379" })
-    		vim.api.nvim_set_hl(0, "RainbowViolet", { fg = "#C678DD" })
-    		vim.api.nvim_set_hl(0, "RainbowCyan", { fg = "#56B6C2" })
-		end)
+	local highlight = {
+    "RainbowRed",
+    "RainbowYellow",
+    "RainbowBlue",
+    "RainbowOrange",
+    "RainbowGreen",
+    "RainbowViolet",
+    "RainbowCyan",
+	}
+	local hooks = require "ibl.hooks"
+	-- create the highlight groups in the highlight setup hook, so they are reset
+	-- every time the colorscheme changes
+	hooks.register(hooks.type.HIGHLIGHT_SETUP, function()
+    vim.api.nvim_set_hl(0, "RainbowRed", { fg = "#E06C75" })
+    vim.api.nvim_set_hl(0, "RainbowYellow", { fg = "#E5C07B" })
+    vim.api.nvim_set_hl(0, "RainbowBlue", { fg = "#61AFEF" })
+    vim.api.nvim_set_hl(0, "RainbowOrange", { fg = "#D19A66" })
+    vim.api.nvim_set_hl(0, "RainbowGreen", { fg = "#98C379" })
+    vim.api.nvim_set_hl(0, "RainbowViolet", { fg = "#C678DD" })
+    vim.api.nvim_set_hl(0, "RainbowCyan", { fg = "#56B6C2" })
+	end)
   require("ibl").setup {
 		indent = { highlight = highlight },
-		scope = { enabled = false }
-  --   buftype_exclude = { "terminal", "nofile" },
-  --   filetype_exclude = {
-  --     "help",
-  --     "startify",
-  --     "dashboard",
-  --     "lazy",
-  --     "neogitstatus",
-  --     "NvimTree",
-  --     "Trouble",
-  --     "text",
-  --   },
-  --   -- char = icons.ui.LineLeft,
-  --   char = icons.ui.LineMiddle,
-  --   -- context_char = icons.ui.LineLeft,
-  --   context_char = icons.ui.LineMiddle,
-  --   show_trailing_blankline_indent = false,
-  --   show_first_indent_level = true,
-  --   use_treesitter = true,
-  --   show_current_context = true,
-  -- }
+		scope = {enabled = true,
+		highlight = "RainbowCyan",
+		char = icons.ui.LineMiddle,
+		show_start = false,
+		show_end = false,
+		show_exact_scope = true,
+		injected_languages = true,
+		include =  {
+				node_type = {python = { "for_statement", "if_statement", "match_statement", "while_statement", "try_statement", "with_statement"}} -- https://github.com/tree-sitter/tree-sitter-python/blob/master/src/node-types.json
+			}
+		}
 
-  -- indent = { char = icons.ui.LineMiddle },
   -- whitespace = {
   --   remove_blankline_trail = true,
   -- },
-  --
-  -- exclude = {
-  --   filetypes = {
-  --     "help",
-  --     "startify",
-  --     "dashboard",
-  --     "lazy",
-  --     "neogitstatus",
-  --     "NvimTree",
-  --     "Trouble",
-  --     "text",
-  --   },
-  --   buftypes = { "terminal", "nofile" },
-  -- },
-  -- scope = { enabled = false },
-	}
+}
+hooks.register(hooks.type.SCOPE_HIGHLIGHT, hooks.builtin.scope_highlight_from_extmark)
 end
+
 
 return M

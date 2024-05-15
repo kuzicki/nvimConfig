@@ -36,6 +36,9 @@ local M = {
     {
       "hrsh7th/cmp-nvim-lua",
     },
+  	-- {
+			-- "hrsh7th/cmp-nvim-lsp-signature-help"
+  	-- }
   },
 }
 
@@ -108,10 +111,12 @@ function M.config()
       }),
     },
     formatting = {
+    	expandable_indicator = true,
       fields = { "kind", "abbr", "menu" },
       format = function(entry, vim_item)
         vim_item.kind = icons.kind[vim_item.kind]
         vim_item.menu = ({
+        	-- nvim_lsp_signature_help = icons.ui.Plus,
           nvim_lsp = "",
           nvim_lua = "",
           luasnip = "",
@@ -134,28 +139,53 @@ function M.config()
       end,
     },
     sources = {
-      { name = "copilot" },
-      { name = "nvim_lsp" },
-      { name = "luasnip" },
+  		-- { name = 'nvim_lsp_signature_help' },
+      -- { name = "copilot" },
+      { name = "nvim_lsp", keyword_length = 3 },
+      { name = "luasnip", keyword_length = 2},
       { name = "cmp_tabnine" },
       { name = "nvim_lua" },
-      { name = "buffer" },
+      { name = "buffer", 
+        keyword_length = 5,
+        option = {
+          get_bufnrs = function()
+            local bufs = {}
+            for _, win in ipairs(vim.api.nvim_list_wins()) do
+                bufs[vim.api.nvim_win_get_buf(win)] = true
+            end
+            return vim.tbl_keys(bufs)
+          end,
+        }
+        },
       { name = "path" },
       { name = "calc" },
       { name = "emoji" },
+    },
+    sorting = {
+      comparators = {
+        cmp.config.compare.offset,
+        cmp.config.compare.exact,
+        cmp.config.compare.recently_used,
+        -- require("cmp-under-comparator").under,
+        cmp.config.compare.kind
+      }
     },
     confirm_opts = {
       behavior = cmp.ConfirmBehavior.Replace,
       select = false,
     },
+    -- window = {
+    --   completion = {
+    --     border = "rounded",
+    --     scrollbar = false,
+    --   },
+    --   documentation = {
+    --     border = "rounded",
+    --   },
+    -- },
     window = {
-      completion = {
-        border = "rounded",
-        scrollbar = false,
-      },
-      documentation = {
-        border = "rounded",
-      },
+			completion = cmp.config.window.bordered(),
+			documentation = cmp.config.window.bordered(),
     },
     experimental = {
       ghost_text = false,
