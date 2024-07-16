@@ -69,8 +69,8 @@ function M.config()
       ["<C-j>"] = cmp.mapping(cmp.mapping.select_next_item(), { "i", "c" }),
       ["<Down>"] = cmp.mapping(cmp.mapping.select_next_item(), { "i", "c" }),
       ["<Up>"] = cmp.mapping(cmp.mapping.select_prev_item(), { "i", "c" }),
-      ["<C-b>"] = cmp.mapping(cmp.mapping.scroll_docs(-1), { "i", "c" }),
-      ["<C-f>"] = cmp.mapping(cmp.mapping.scroll_docs(1), { "i", "c" }),
+      ["<C-b>"] = cmp.mapping(cmp.mapping.scroll_docs(-4), { "i", "c" }),
+      ["<C-f>"] = cmp.mapping(cmp.mapping.scroll_docs(4), { "i", "c" }),
       ["<C-c>"] = cmp.mapping(cmp.mapping.complete(), { "i", "c" }),
       ["<C-e>"] = cmp.mapping {
         i = cmp.mapping.abort(),
@@ -140,35 +140,15 @@ function M.config()
     },
     sources = {
   		-- { name = 'nvim_lsp_signature_help' },
-      -- { name = "copilot" },
-      { name = "nvim_lsp", keyword_length = 3 },
-      { name = "luasnip", keyword_length = 2},
+      { name = "copilot" },
+      { name = "nvim_lsp" },
+      { name = "luasnip" },
       { name = "cmp_tabnine" },
       { name = "nvim_lua" },
-      { name = "buffer", 
-        keyword_length = 5,
-        option = {
-          get_bufnrs = function()
-            local bufs = {}
-            for _, win in ipairs(vim.api.nvim_list_wins()) do
-                bufs[vim.api.nvim_win_get_buf(win)] = true
-            end
-            return vim.tbl_keys(bufs)
-          end,
-        }
-        },
+      { name = "buffer" },
       { name = "path" },
       { name = "calc" },
       { name = "emoji" },
-    },
-    sorting = {
-      comparators = {
-        cmp.config.compare.offset,
-        cmp.config.compare.exact,
-        cmp.config.compare.recently_used,
-        -- require("cmp-under-comparator").under,
-        cmp.config.compare.kind
-      }
     },
     confirm_opts = {
       behavior = cmp.ConfirmBehavior.Replace,

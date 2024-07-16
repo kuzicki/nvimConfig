@@ -33,7 +33,7 @@ vim.opt.breakindent = true
 
 vim.opt.shiftwidth = 2 -- the number of spaces inserted for each indentation
 vim.opt.tabstop = 2 -- insert 2 spaces for a tab
-vim.opt.cursorline = true -- highlight the current line
+vim.opt.cursorline = false -- highlight the current line
 vim.opt.number = true -- set numbered lines
 vim.opt.laststatus = 3
 vim.opt.showcmd = false
@@ -42,13 +42,13 @@ vim.opt.relativenumber = true -- set relative numbered lines
 vim.opt.numberwidth = 4 -- set number column width to 2 {default 4}
 vim.opt.signcolumn = "no" -- always show the sign column, otherwise it would shift the text each time
 vim.opt.wrap = true -- display lines as one long line
-vim.opt.scrolloff = 10 -- was 0 so it keeps like the cursor midish on the screen
+vim.opt.scrolloff = 6 -- was 0 so it keeps like the cursor midish on the screen
 vim.opt.sidescrolloff = 8
 
 vim.opt.autochdir = false
 
--- vim.o.guifont="3270 Nerd Font:h17"
-vim.o.guifont="GohuFont 14 Nerd Font:h15"
+vim.o.guifont="3270 Nerd Font:h17"
+-- vim.o.guifont="GohuFont 14 Nerd Font:h15"
 -- vim.opt.guifont = "monospace:h17" -- the font used in graphical neovim applications
 vim.opt.title = false
 -- colorcolumn = "80",

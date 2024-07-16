@@ -12,7 +12,8 @@ function M.config()
 	require("overseer").setup {
 		strategy = {
 			"toggleterm",
-			quit_on_exit = "never"
+			quit_on_exit = "never",
+			direction = "float",
 		},
 		templates = { "builtin", "kuzicki.python_run", "kuzicki.cmake_run"},
 	}

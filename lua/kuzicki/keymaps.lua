@@ -20,11 +20,11 @@ vim.cmd("cabbrev wqa Z")
 -- keymap("n", "<leader>r", "<M-3>build.bat", opts)
 
 -- Better window navigation
-keymap("n", "<m-h>", "<C-w>h", opts)
-keymap("n", "<m-j>", "<C-w>j", opts)
-keymap("n", "<m-k>", "<C-w>k", opts)
-keymap("n", "<m-l>", "<C-w>l", opts)
-keymap("n", "<m-tab>", "<c-6>", opts)
+keymap({"n", "x"}, "<m-h>", "<C-w>h", opts)
+keymap({"n", "x"}, "<m-j>", "<C-w>j", opts)
+keymap({"n", "x"}, "<m-k>", "<C-w>k", opts)
+keymap({"n", "x"}, "<m-l>", "<C-w>l", opts)
+keymap({"n", "x"}, "<m-tab>", "<c-6>", opts)
 vim.keymap.set("n", "=", [[<cmd>vertical resize +5<cr>]]) -- make the window biger vertically
 vim.keymap.set("n", "-", [[<cmd>vertical resize -5<cr>]]) -- make the window smaller vertically
 vim.keymap.set("n", "+", [[<cmd>horizontal resize +2<cr>]]) -- make the window bigger horizontally by pressing shift and =

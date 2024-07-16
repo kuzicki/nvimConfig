@@ -28,11 +28,11 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
   end,
 })
 
-vim.api.nvim_create_autocmd({ "CmdWinEnter" }, {
-  callback = function()
-    vim.cmd "quit"
-  end,
-})
+-- vim.api.nvim_create_autocmd({ "CmdWinEnter" }, {
+--   callback = function()
+--     vim.cmd "quit"
+--   end,
+-- })
 
 vim.api.nvim_create_autocmd({ "VimResized" }, {
   callback = function()
@@ -40,16 +40,16 @@ vim.api.nvim_create_autocmd({ "VimResized" }, {
   end,
 })
 
-vim.api.nvim_create_autocmd({ "BufWinEnter" }, {
-  pattern = { "*" },
-  callback = function()
-    vim.cmd "checktime"
-  end,
-})
+-- vim.api.nvim_create_autocmd({ "BufWinEnter" }, {
+--   pattern = { "*" },
+--   callback = function()
+--     vim.cmd "checktime"
+--   end,
+-- })
 
 vim.api.nvim_create_autocmd({ "TextYankPost" }, {
   callback = function()
-    vim.highlight.on_yank { higroup = "Visual", timeout = 40 }
+    vim.highlight.on_yank { higroup = "Visual", timeout = 45 }
   end,
 })
 

@@ -14,9 +14,9 @@ function M.config()
     cmake_command = "cmake", -- this is used to specify cmake command path
     ctest_command = "ctest", -- this is used to specify ctest command path
     cmake_regenerate_on_save = true, -- auto generate when save CMakeLists.txt
-    cmake_generate_options = { "-G \"MinGW Makefiles\"","-DCMAKE_EXPORT_COMPILE_COMMANDS=1", "-std=c++20" }, -- this will be passed when invoke `CMakeGenerate`
+    cmake_generate_options = { "-DCMAKE_EXPORT_COMPILE_COMMANDS=1"}, -- this will be passed when invoke `CMakeGenerate`
     cmake_build_options = {},
-    -- cmake_build_directory = "out/${variant:buildType}",
+    cmake_build_directory = "build",
     -- support macro expansion:
     --       ${kit}
     --       ${kitGenerator}

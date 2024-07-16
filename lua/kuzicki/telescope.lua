@@ -1,6 +1,7 @@
 local M = {
   "nvim-telescope/telescope.nvim",
-  dependencies = { { "nvim-telescope/telescope-fzf-native.nvim", build = "make", lazy = true } },
+  dependencies = { { "nvim-telescope/telescope-fzf-native.nvim", build = "make", lazy = true },
+    {"nvim-telescope/telescope-project.nvim"}, }
 }
 
 function M.config()
@@ -21,6 +22,7 @@ function M.config()
   local icons = require "kuzicki.icons"
   local actions = require "telescope.actions"
 
+  require'telescope'.load_extension('project')
 
   require("telescope").setup {
     defaults = {
