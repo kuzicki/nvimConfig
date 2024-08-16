@@ -21,15 +21,16 @@ function M.config()
 [[██║  ██╗╚██████╔╝███████╗██║╚██████╗██║  ██╗██║]],
 [[╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚═╝ ╚═════╝╚═╝  ╚═╝╚═╝]],
 	}
- 
+
+  local init_file = vim.fn.stdpath("config") .. "/init.lua"
   dashboard.section.buttons.val = {
     button("f", icons.ui.Files .. " Find file", ":Telescope find_files <CR>"),
     button("n", icons.ui.NewFile .. " New file", ":ene <BAR> startinsert <CR>"),
     button("p", icons.git.Repo .. " Find project", ":lua require('telescope').extensions.project.project()<CR>"),
     button("r", icons.ui.History .. " Recent files", ":Telescope oldfiles <CR>"),
     button("t", icons.ui.Text .. " Find text", ":Telescope live_grep <CR>"),
-    button("c", icons.ui.Gear .. " Config", ":e C:/Users/TheBestComputer/AppData/Local/nvim/init.lua <CR>"),
-    button("v", icons.kind.Property .. " Go to config", ":e C:/Users/TheBestComputer/AppData/Local/nvim/init.lua<CR> :cd %/..<CR>"),
+    button("c", icons.ui.Gear .. " Config", ":e " .. init_file .. "<CR>"),
+    button("v", icons.kind.Property .. " Go to config", ":e " .. init_file .."<CR> :cd %/..<CR>"),
     button("q", icons.ui.SignOut .. " Quit", ":qa<CR>"),
   }
   local function footer()

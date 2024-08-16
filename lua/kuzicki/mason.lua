@@ -8,13 +8,10 @@ local M = {
 
 function M.config()
   local servers = {
+    "clangd",
     "lua_ls",
-    "cssls",
-    "html",
-    "tsserver",
     "pyright",
-    "bashls",
-    "jsonls",
+    "json-lsp",
     "rust_analyzer"
   }
 

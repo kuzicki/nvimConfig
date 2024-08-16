@@ -26,9 +26,9 @@ spec "kuzicki.dap"
 spec "kuzicki.guess-indent"
 spec "kuzicki.cmake-tools"
 spec "kuzicki.autopairs"
-spec "kuzicki.lightspeed"
+spec "kuzicki.leap" -- checking instead of lightspeed
 spec "kuzicki.project"
--- spec "kuzicki.indentline" maybe the culprit
+-- spec "kuzicki.indentline" kinda laggy
 spec "kuzicki.alpha"
 spec "kuzicki.noice"
 spec "kuzicki.various_textobjects"
