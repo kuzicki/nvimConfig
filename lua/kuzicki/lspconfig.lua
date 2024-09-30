@@ -73,7 +73,8 @@ function M.config()
     "lua_ls",
     "pyright",
     "jsonls",
-    "rust_analyzer"
+    "rust_analyzer",
+    "omnisharp"
   }
 
   local default_diagnostic_config = {
