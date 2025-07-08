@@ -38,10 +38,4 @@ spec "kuzicki.various_textobjects"
 spec "kuzicki.extras.ufo"
 spec "kuzicki.extras.cellular-automaton"
 
--- jupyter notebook
-spec "kuzicki.jupyter.molten"
-
 require "kuzicki.lazy"
-
---"C:\Users\TheBestComputer\AppData\Local\nvim\init.lua"  r! echo "%:p"
-"C:\Users\Kuzicki\AppData\Local\nvim\init.lua" 

@@ -101,7 +101,22 @@ function M.config()
     },
   }
 
-  vim.diagnostic.config(default_diagnostic_config)
+  local function remove_signcolumn_diagnostics(config)
+    local new_config = vim.deepcopy(config)
+    new_config.signs = {
+      active = true,
+      values = {
+        { name = "DiagnosticSignError", text = "" },
+        { name = "DiagnosticSignWarn",  text = "" },
+        { name = "DiagnosticSignHint",  text = "" },
+        { name = "DiagnosticSignInfo",  text = "" },
+      },
+    }
+    return new_config
+  end
+
+  local diagnostic_config = remove_signcolumn_diagnostics(default_diagnostic_config)
+  vim.diagnostic.config(diagnostic_config)
 
   for _, sign in ipairs(vim.tbl_get(vim.diagnostic.config(), "signs", "values") or {}) do
     vim.fn.sign_define(sign.name, { texthl = sign.name, text = sign.text, numhl = sign.name })
