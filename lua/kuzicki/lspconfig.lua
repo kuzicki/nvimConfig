@@ -76,6 +76,7 @@ function M.config()
     "rust_analyzer",
     "omnisharp",
     "cmake",
+    "tsserver",
   }
 
   local default_diagnostic_config = {
