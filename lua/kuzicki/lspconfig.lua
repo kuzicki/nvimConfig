@@ -74,7 +74,8 @@ function M.config()
     "pyright",
     "jsonls",
     "rust_analyzer",
-    "omnisharp"
+    "omnisharp",
+    "cmake",
   }
 
   local default_diagnostic_config = {
