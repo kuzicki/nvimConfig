@@ -75,3 +75,13 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 --     end
 --   end,
 -- })
+
+
+-- Remove ':' from indentkeys for C++ files
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = {"cpp", "c", "h", "hpp", "cxx", "hxx"},
+  callback = function()
+    vim.opt_local.indentkeys:remove(":")
+  end
+})
+
