@@ -85,3 +85,20 @@ vim.api.nvim_create_autocmd("FileType", {
   end
 })
 
+local function CleanShaDaTmp()
+  local shada_dir = vim.fn.stdpath("data") .. "/shada"
+  local pattern = shada_dir .. "/main.shada.tmp.*"
+
+  for _, file in ipairs(vim.fn.glob(pattern, false, true)) do
+    -- protect against errors if file can't be deleted
+    local ok, err = pcall(os.remove, file)
+    if not ok then
+      print("Failed to remove ShaDa temp file:", file, err)
+    end
+  end
+end
+
+-- Run on startup
+vim.api.nvim_create_autocmd("VimEnter", {
+  callback = CleanShaDaTmp,
+})
