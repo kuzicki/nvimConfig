@@ -35,7 +35,7 @@ spec "kuzicki.various_textobjects"
 -- spec "kuzicki.lsp_signature"
 -- spec "kuzicki.extras.neoscroll"
 -- spec "kuzicki.extras.illuminate" highlight words based on LSP
-spec "kuzicki.extras.ufo"
+-- spec "kuzicki.extras.ufo"
 spec "kuzicki.extras.cellular-automaton"
 
 require "kuzicki.lazy"

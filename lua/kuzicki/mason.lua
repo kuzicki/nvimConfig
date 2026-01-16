@@ -5,14 +5,16 @@ local M = {
   },
 }
 
-
 function M.config()
   local servers = {
     "clangd",
     "lua_ls",
     "pyright",
-    "json-lsp",
-    "rust_analyzer"
+    "jsonls",
+    "rust_analyzer",
+    "omnisharp",
+    "cmake",
+    "ts_ls",
   }
 
   require("mason").setup {
@@ -23,6 +25,7 @@ function M.config()
 
   require("mason-lspconfig").setup {
     ensure_installed = servers,
+    automatic_installation = true,
   }
 end
 

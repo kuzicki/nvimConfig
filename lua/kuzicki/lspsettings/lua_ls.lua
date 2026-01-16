@@ -25,9 +25,9 @@ return {
         enable = true,
         arrayIndex = "Disable", -- "Enable" | "Auto" | "Disable"
         await = true,
-        paramName = "All", -- "All" | "Literal" | "Disable" Was Disable
+        paramName = "All",      -- "All" | "Literal" | "Disable" Was Disable
         paramType = true,
-        semicolon = "All", -- "All" | "SameLine" | "Disable"
+        semicolon = "All",      -- "All" | "SameLine" | "Disable"
         setType = false,
       },
       telemetry = {

@@ -3,46 +3,66 @@ local M = {
   event = { "BufReadPre", "BufNewFile" },
   dependencies = {
     {
-      "folke/neodev.nvim",
+      "folke/lazydev.nvim", -- Replaces neodev.nvim (maintained & faster)
+      ft = "lua", -- only load on lua files
+      opts = {
+        library = {
+          -- See the configuration section for more details
+          -- Load luvit types when the `vim.uv` word is found
+          { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+        },
+      },
     },
   },
 }
 
 local function lsp_keymaps(bufnr)
-  local opts = { noremap = true, silent = true }
-  local keymap = vim.api.nvim_buf_set_keymap
-  keymap(bufnr, "n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", opts)
-  keymap(bufnr, "n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", opts)
-  keymap(bufnr, "n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", opts)
-  keymap(bufnr, "n", "gI", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
-  keymap(bufnr, "n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>", opts)
-  keymap(bufnr, "n", "gl", "<cmd>lua vim.diagnostic.open_float()<CR>", opts)
-  keymap(bufnr, "n", "gR", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
-  keymap(bufnr, "i", "<C-k>", "<cmd>lua vim.lsp.buf.hover()<CR>", opts)
-	keymap(bufnr, "i", "<C-s>", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
+  local opts = { buffer = bufnr, silent = true }
+  
+  -- Updated to use vim.keymap.set (Clean, safer, modern API)
+  vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
+  vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+  vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+  vim.keymap.set("n", "gI", vim.lsp.buf.implementation, opts)
+  vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
+  vim.keymap.set("n", "gl", vim.diagnostic.open_float, opts)
+  vim.keymap.set("n", "gR", vim.lsp.buf.rename, opts)
+  vim.keymap.set("i", "<C-k>", vim.lsp.buf.hover, opts)
+  vim.keymap.set("i", "<C-s>", vim.lsp.buf.signature_help, opts)
 end
 
 M.on_attach = function(client, bufnr)
+  print("LSP ATTACHED to buffer: " .. bufnr)
   lsp_keymaps(bufnr)
 
-  if client.supports_method "textDocument/inlayHint" then
-    vim.lsp.inlay_hint.enable(true)
+
+  if client.server_capabilities.inlayHintProvider then
+    vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
   end
 end
 
 function M.common_capabilities()
-  local capabilities = vim.lsp.protocol.make_client_capabilities()
-  capabilities.textDocument.completion.completionItem.snippetSupport = true
+  -- local capabilities = vim.lsp.protocol.make_client_capabilities()
+  -- capabilities.textDocument.completion.completionItem.snippetSupport = true
+  
+  -- If you use nvim-cmp, you usually want to add this line:
+  local cmp_nvim_lsp = require("cmp_nvim_lsp")
+  capabilities = cmp_nvim_lsp.default_capabilities(capabilities)
+  
   return capabilities
 end
 
 M.toggle_inlay_hints = function()
   local bufnr = vim.api.nvim_get_current_buf()
-  vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+  -- Updated arguments for enable (boolean, filter)
+  vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
 end
 
 function M.config()
   local wk = require "which-key"
+  
+  -- Kept wk.register for compatibility. 
+  -- If you updated WhichKey to v3, you should use wk.add() instead.
   wk.register {
     ["<leader>la"] = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code Action" },
     ["<leader>lf"] = {
@@ -69,24 +89,24 @@ function M.config()
   local icons = require "kuzicki.icons"
 
   local servers = {
-  	"clangd",
+    "clangd",
     "lua_ls",
     "pyright",
     "jsonls",
     "rust_analyzer",
     "omnisharp",
     "cmake",
-    "tsserver",
+    "ts_ls", -- Ensure this is ts_ls, not tsserver
   }
 
-  local default_diagnostic_config = {
+  -- Modern Diagnostic Config (Neovim 0.10+)
+  vim.diagnostic.config({
     signs = {
-      active = true,
-      values = {
-        { name = "DiagnosticSignError", text = icons.diagnostics.Error },
-        { name = "DiagnosticSignWarn", text = icons.diagnostics.Warning },
-        { name = "DiagnosticSignHint", text = icons.diagnostics.Hint },
-        { name = "DiagnosticSignInfo", text = icons.diagnostics.Information },
+      text = {
+        [vim.diagnostic.severity.ERROR] = icons.diagnostics.Error,
+        [vim.diagnostic.severity.WARN] = icons.diagnostics.Warning,
+        [vim.diagnostic.severity.HINT] = icons.diagnostics.Hint,
+        [vim.diagnostic.severity.INFO] = icons.diagnostics.Information,
       },
     },
     virtual_text = false,
@@ -101,34 +121,14 @@ function M.config()
       header = "",
       prefix = "",
     },
-  }
+  })
 
-  local function remove_signcolumn_diagnostics(config)
-    local new_config = vim.deepcopy(config)
-    new_config.signs = {
-      active = true,
-      values = {
-        { name = "DiagnosticSignError", text = "" },
-        { name = "DiagnosticSignWarn",  text = "" },
-        { name = "DiagnosticSignHint",  text = "" },
-        { name = "DiagnosticSignInfo",  text = "" },
-      },
-    }
-    return new_config
-  end
-
-  local diagnostic_config = remove_signcolumn_diagnostics(default_diagnostic_config)
-  vim.diagnostic.config(diagnostic_config)
-
-  for _, sign in ipairs(vim.tbl_get(vim.diagnostic.config(), "signs", "values") or {}) do
-    vim.fn.sign_define(sign.name, { texthl = sign.name, text = sign.text, numhl = sign.name })
-  end
-
-	vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = 'rounded' })
-	-- vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = 'rounded' })
-	vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = 'rounded' })
+  -- Handling UI borders
+  vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = 'rounded' })
+  vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = 'rounded' })
   require("lspconfig.ui.windows").default_options.border = "rounded"
 
+  -- The Setup Loop
   for _, server in pairs(servers) do
     local opts = {
       on_attach = M.on_attach,
@@ -140,11 +140,12 @@ function M.config()
       opts = vim.tbl_deep_extend("force", settings, opts)
     end
 
-    if server == "lua_ls" then
-      require("neodev").setup {}
-    end
+    -- Fix: Removed manual neodev setup (lazydev handles this automatically now)
 
-    lspconfig[server].setup(opts)
+    -- Fix: Check if server exists in lspconfig before setup to avoid "index" errors
+    if lspconfig[server] then
+      lspconfig[server].setup(opts)
+    end
   end
 end
 
