@@ -1,9 +1,6 @@
-local util = require "lspconfig/util"
-
 return {
   filetypes = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
-  root_dir = util.root_pattern("tsconfig.json", "package.json", "jsconfig.json", ".git"),
-
+  root_markers = { "tsconfig.json", "package.json", "jsconfig.json", ".git" },
   settings = {
     typescript = {
       format = { enable = false },
@@ -12,7 +9,6 @@ return {
       format = { enable = false },
     },
   },
-
   handlers = {
     ["textDocument/publishDiagnostics"] = function(_, result, ctx, config)
       if result.diagnostics then

@@ -1,5 +1,6 @@
--- https://luals.github.io/wiki/settings/
 return {
+  filetypes = { "lua" },
+  root_markers = { ".luarc.json", ".git", vim.uv.cwd() },
   settings = {
     Lua = {
       format = {
@@ -23,11 +24,11 @@ return {
       },
       hint = {
         enable = true,
-        arrayIndex = "Disable", -- "Enable" | "Auto" | "Disable"
+        arrayIndex = "Disable",
         await = true,
-        paramName = "All",      -- "All" | "Literal" | "Disable" Was Disable
+        paramName = "All",
         paramType = true,
-        semicolon = "All",      -- "All" | "SameLine" | "Disable"
+        semicolon = "All",
         setType = false,
       },
       telemetry = {
