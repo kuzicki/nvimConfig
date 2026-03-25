@@ -5,9 +5,9 @@ local M = {
 
 function M.config()
 	local wk = require "which-key"
-	wk.register {
-		["<leader>rp"] = { "<cmd>OverseerRun pymain<cr>", "Run python main"},
-		["<leader>rc"] = { "<cmd>OverseerRun cmakerun<cr>", "Run cmake"}
+	wk.add {
+		{ "<leader>rp", "<cmd>OverseerRun pymain<cr>", desc = "Run python main" },
+		{ "<leader>rc", "<cmd>OverseerRun cmakerun<cr>", desc = "Run cmake" },
 	}
 	require("overseer").setup {
 		strategy = {

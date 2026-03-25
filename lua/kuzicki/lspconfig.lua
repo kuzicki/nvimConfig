@@ -18,8 +18,7 @@ local M = {
 
 local function lsp_keymaps(bufnr)
   local opts = { buffer = bufnr, silent = true }
-  
-  -- Updated to use vim.keymap.set (Clean, safer, modern API)
+
   vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
   vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
   vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
@@ -32,9 +31,7 @@ local function lsp_keymaps(bufnr)
 end
 
 M.on_attach = function(client, bufnr)
-  print("LSP ATTACHED to buffer: " .. bufnr)
   lsp_keymaps(bufnr)
-
 
   if client.server_capabilities.inlayHintProvider then
     vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
@@ -44,11 +41,11 @@ end
 function M.common_capabilities()
   -- local capabilities = vim.lsp.protocol.make_client_capabilities()
   -- capabilities.textDocument.completion.completionItem.snippetSupport = true
-  
+
   -- If you use nvim-cmp, you usually want to add this line:
   local cmp_nvim_lsp = require("cmp_nvim_lsp")
-  capabilities = cmp_nvim_lsp.default_capabilities(capabilities)
-  
+  local capabilities = cmp_nvim_lsp.default_capabilities(capabilities)
+
   return capabilities
 end
 
@@ -60,7 +57,7 @@ end
 
 function M.config()
   local wk = require "which-key"
-  
+
   -- Kept wk.register for compatibility. 
   -- If you updated WhichKey to v3, you should use wk.add() instead.
   wk.register {
@@ -96,10 +93,9 @@ function M.config()
     "rust_analyzer",
     "omnisharp",
     "cmake",
-    "ts_ls", -- Ensure this is ts_ls, not tsserver
+    "ts_ls",
   }
 
-  -- Modern Diagnostic Config (Neovim 0.10+)
   vim.diagnostic.config({
     signs = {
       text = {
@@ -123,12 +119,10 @@ function M.config()
     },
   })
 
-  -- Handling UI borders
   vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = 'rounded' })
   vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = 'rounded' })
   require("lspconfig.ui.windows").default_options.border = "rounded"
 
-  -- The Setup Loop
   for _, server in pairs(servers) do
     local opts = {
       on_attach = M.on_attach,
@@ -140,9 +134,6 @@ function M.config()
       opts = vim.tbl_deep_extend("force", settings, opts)
     end
 
-    -- Fix: Removed manual neodev setup (lazydev handles this automatically now)
-
-    -- Fix: Check if server exists in lspconfig before setup to avoid "index" errors
     if lspconfig[server] then
       lspconfig[server].setup(opts)
     end

@@ -6,8 +6,8 @@ local M = {
 
 function M.config()
   local wk = require "which-key"
-  wk.register {
-    ["<leader>rm"] = { "<cmd>CMakeRun<CR>", "Run CMake" },
+  wk.add {
+    { "<leader>rm", "<cmd>CMakeRun<CR>", desc = "Run CMake" },
   }
 
   require("cmake-tools").setup {
