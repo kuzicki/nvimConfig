@@ -14,27 +14,40 @@ local M = {
   },
 }
 
-local function lsp_keymaps(bufnr)
-  local opts = { buffer = bufnr, silent = true }
+-- Set keymaps globally on LspAttach event
+vim.api.nvim_create_autocmd("LspAttach", {
+  callback = function(ev)
+    local bufnr = ev.buf
+    local client = vim.lsp.get_client_by_id(ev.data.client_id)
+    if not client then
+      return
+    end
 
-  vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
-  vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
-  vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
-  vim.keymap.set("n", "gI", vim.lsp.buf.implementation, opts)
-  vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
-  vim.keymap.set("n", "gl", vim.diagnostic.open_float, opts)
-  vim.keymap.set("n", "gR", vim.lsp.buf.rename, opts)
-  vim.keymap.set("i", "<C-k>", vim.lsp.buf.hover, opts)
-  vim.keymap.set("i", "<C-s>", vim.lsp.buf.signature_help, opts)
-end
+    local opts = { buffer = bufnr, silent = true }
 
-local on_attach = function(client, bufnr)
-  lsp_keymaps(bufnr)
+    vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
+    vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+    vim.keymap.set("n", "K", function()
+      vim.lsp.buf.hover({ border = "rounded", close_events = { "CursorMoved", "BufLeave", "InsertEnter" } })
+    end, opts)
+    vim.keymap.set("n", "gI", function()
+      vim.lsp.buf.implementation({ border = "rounded", close_events = { "CursorMoved", "BufLeave", "InsertEnter" } })
+    end, opts)
+    vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
+    vim.keymap.set("n", "gl", function()
+      vim.diagnostic.open_float({ border = "rounded", focusable = true, close_events = { "CursorMoved", "BufLeave", "InsertEnter" } })
+    end, opts)
+    vim.keymap.set("n", "gR", vim.lsp.buf.rename, opts)
+    vim.keymap.set("i", "<C-k>", function()
+      vim.lsp.buf.signature_help({ border = "rounded", close_events = { "CursorMoved", "BufLeave", "InsertEnter" } })
+    end, opts)
+    vim.keymap.set("i", "<C-s>", vim.lsp.buf.signature_help, opts)
 
-  if client.server_capabilities.inlayHintProvider then
-    vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
-  end
-end
+    if client.server_capabilities.inlayHintProvider then
+      vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+    end
+  end,
+})
 
 M.toggle_inlay_hints = function()
   local bufnr = vim.api.nvim_get_current_buf()
@@ -65,7 +78,6 @@ function M.config()
   -- Global LSP config
   vim.lsp.config("*", {
     capabilities = capabilities,
-    on_attach = on_attach,
   })
 
   local icons = require "kuzicki.icons"
